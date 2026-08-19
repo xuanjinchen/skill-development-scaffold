@@ -20,6 +20,7 @@ const SOURCE_SCRIPTS = Object.freeze({
 });
 const SOURCE_FILES = Object.freeze([
   'AGENTS.md',
+  'CHANGELOG.md',
   'CONTRIBUTING.md',
   'LICENSE',
   'README.md',
@@ -32,6 +33,7 @@ const SOURCE_FILES = Object.freeze([
 const INITIALIZED_FILES = Object.freeze(['SKILL.md']);
 const OPTIONAL_SOURCE_FILES = new Set();
 const REQUIRED_SOURCE_FILES = Object.freeze([
+  'CHANGELOG.md',
   'docs/mature-skill-development-design.md',
   'docs/mature-skill-development-plan.md',
   'docs/scaffold-usage.md',

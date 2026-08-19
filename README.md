@@ -115,6 +115,10 @@ AGENTS.md            开发 Agent 的执行规则
 
 提交改动前运行 `npm run check`。行为修改应先提供失败测试；文档修改应同步更新契约测试。Pull Request 只包含当前目标所需的文件，不覆盖无关工作区改动。
 
+## 版本与发布
+
+版本变化记录在 [CHANGELOG.md](CHANGELOG.md)。本仓库只通过不可变 Git Tag 和 GitHub Release 发布，并仅使用 GitHub 自动生成的 source archives（源码归档）；不发布 npm 包，也不上传自定义 Release 资产。`npm pack --dry-run` 只用于检查公开文件白名单。
+
 ## 安全
 
 不要在 Issue、日志、fixture、文档或提交历史中加入真实凭据、私人路径和私人邮箱。涉及付费服务、用户配置、破坏性操作或公开发布时，先取得明确授权。安全问题请使用 GitHub 的私密漏洞报告渠道，不要公开披露可利用细节。

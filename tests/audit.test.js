@@ -284,6 +284,7 @@ test('rejects unsafe and non-whitelisted package entries deterministically', asy
   const root = await createRepository(t);
   const report = await auditRepository(root, {
     packEntries: [
+      { path: 'package/CHANGELOG.md' },
       { path: 'package/README.md' },
       { path: 'package/tests/secret.test.js' },
       { path: 'package/.scaffold/state.json' },
@@ -298,6 +299,7 @@ test('rejects unsafe and non-whitelisted package entries deterministically', asy
   });
   const keys = issueKeys(report);
 
+  assert.equal(keys.has('PACKAGE_FILE_FORBIDDEN:package:CHANGELOG.md'), false);
   assert.ok(keys.has('PACKAGE_FILE_FORBIDDEN:package:tests/secret.test.js'));
   assert.ok(keys.has('PACKAGE_FILE_FORBIDDEN:package:.scaffold/state.json'));
   assert.ok(keys.has('PACKAGE_FILE_FORBIDDEN:package:eval-workspaces/run/output.json'));

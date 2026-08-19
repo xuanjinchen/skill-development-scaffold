@@ -151,7 +151,7 @@ source 仓库的 `package.json#files` 只包含维护脚手架所需文件。ini
 }
 ```
 
-该白名单限制 `npm pack` 内容，不会改变 GitHub 自动源码归档。发布前分别检查 npm 包和 GitHub Release 资产，不要把 fixture、状态、恢复证据或私有记录加入自定义资产。
+该白名单限制 `npm pack` 内容，不会改变 GitHub 自动源码归档。对本脚手架仓库，`npm pack --dry-run` 仅用于内部发布白名单审计，不发布到 npm；GitHub Release 只使用自动生成的 source archives，不上传任何自定义 Release 资产。由脚手架生成的 Skill 若选择其他分发入口，必须先在 Skill Brief 中启用并按对应白名单单独验证。
 
 ## 升级
 

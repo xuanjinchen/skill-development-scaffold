@@ -20,6 +20,7 @@ const PROJECT_ROOT = fileURLToPath(new URL('..', import.meta.url));
 const VALIDATE_SCRIPT = path.join(PROJECT_ROOT, 'scripts', 'validate.js');
 const SOURCE_FILES = [
   'AGENTS.md',
+  'CHANGELOG.md',
   'CONTRIBUTING.md',
   'LICENSE',
   'README.md',
@@ -30,6 +31,7 @@ const SOURCE_FILES = [
   'templates',
 ];
 const REQUIRED_SOURCE_FILES = [
+  'CHANGELOG.md',
   'docs/mature-skill-development-design.md',
   'docs/mature-skill-development-plan.md',
   'docs/scaffold-usage.md',

@@ -60,6 +60,7 @@ const SAFE_SENSITIVE_NAMES = new Set([
 ]);
 const PACKAGE_TOP_LEVEL = new Set([
   'AGENTS.md',
+  'CHANGELOG.md',
   'CONTRIBUTING.md',
   'LICENSE',
   'README.md',

@@ -7,6 +7,10 @@ import test from 'node:test';
 import { fileURLToPath } from 'node:url';
 
 const PROJECT_ROOT = fileURLToPath(new URL('..', import.meta.url));
+const REPOSITORY_MODE = JSON.parse(
+  await readFile(path.join(PROJECT_ROOT, 'package.json'), 'utf8'),
+).scaffold.mode;
+const sourceTest = REPOSITORY_MODE === 'source' ? test : test.skip;
 
 async function source(relativePath) {
   return readFile(path.join(PROJECT_ROOT, ...relativePath.split('/')), 'utf8');
@@ -31,6 +35,7 @@ test('package metadata exposes the deterministic audit without publishing local 
   assert.deepEqual(pkg.files, pkg.scaffold.mode === 'source'
     ? [
       'AGENTS.md',
+      'CHANGELOG.md',
       'CONTRIBUTING.md',
       'LICENSE',
       'README.md',
@@ -102,6 +107,21 @@ test('governance documents define public contribution and private reporting boun
   ]) {
     assert.match(contributing, requirement);
   }
+});
+
+sourceTest('release documentation limits this repository to GitHub source archives', async () => {
+  const changelog = await source('CHANGELOG.md');
+  const readme = await source('README.md');
+  const usage = await source('docs/scaffold-usage.md');
+  const pkg = JSON.parse(await source('package.json'));
+
+  assert.equal(pkg.private, true);
+  assert.match(changelog, /^# Changelog\n/u);
+  assert.match(changelog, /^## \[0\.1\.0\] - 2026-08-19$/mu);
+  assert.match(readme, /GitHub.*source archives|GitHub.*源码归档/iu);
+  assert.match(usage, /npm pack.*内部.*白名单/iu);
+  assert.match(usage, /不发布.*npm|npm.*不发布/iu);
+  assert.match(usage, /不上传.*自定义.*Release.*资产/iu);
 });
 
 test('issue and pull request templates collect reproducibility and safety evidence', async () => {
