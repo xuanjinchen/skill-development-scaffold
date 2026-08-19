@@ -65,6 +65,7 @@ const PACKAGE_TOP_LEVEL = new Set([
   'LICENSE',
   'README.md',
   'SECURITY.md',
+  'SKILL.md',
   'docs',
   'package.json',
   'scripts',
@@ -83,6 +84,8 @@ const PACKAGE_FORBIDDEN_ROOTS = new Set([
   'tests',
 ]);
 const WINDOWS_DEVICE_PATTERN = /^(?:con|prn|aux|nul|clock\$|conin\$|conout\$|com[1-9¹²³]|lpt[1-9¹²³])(?:\.|$)/iu;
+// 只识别事务模块生成的 UUID 文件名，避免把用户正常维护的 .stage 或 .backup 文件误判为恢复证据。
+const TRANSACTION_ARTIFACT_PATTERN = /^\..+\.[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}\.(?:\d+\.stage|backup|[a-z][a-z-]*-detached)$/iu;
 
 function compareIssues(left, right) {
   return left.code.localeCompare(right.code, 'en')
@@ -183,7 +186,7 @@ function containsCredential(text) {
 
 function publicEmail(email) {
   const normalized = email.trim().toLowerCase();
-  if (normalized === 'tester@example.invalid') {
+  if (normalized === 'tester@example.invalid' || normalized === 'noreply@github.com') {
     return true;
   }
   const match = /^(?:\d+\+)?([a-z0-9](?:[a-z0-9-]{0,37}[a-z0-9])?)(?:\[bot\])?@users\.noreply\.github\.com$/u
@@ -437,10 +440,13 @@ function validatePackageEntries(entries, addIssue, scanContent) {
     const containsForbiddenDirectory = segments
       .slice(0, -1)
       .some((segment) => PACKAGE_FORBIDDEN_ROOTS.has(segment.toLowerCase()));
+    const containsTransactionArtifact = segments
+      .some((segment) => TRANSACTION_ARTIFACT_PATTERN.test(segment));
     if (sensitiveFilename(relativePath)) {
       addIssue('SENSITIVE_FILENAME', location);
     } else if (!PACKAGE_TOP_LEVEL.has(topLevel)
       || containsForbiddenDirectory
+      || containsTransactionArtifact
       || relativePath.toLowerCase().endsWith('.log')) {
       addIssue('PACKAGE_FILE_FORBIDDEN', location);
     }

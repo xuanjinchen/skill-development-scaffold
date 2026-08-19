@@ -229,6 +229,7 @@ sourceTest('all licenses initialize, validate, remain idempotent, and preserve G
       assert.equal((await readFile(configPath)).equals(configBefore), true);
 
       await runNpm(root, ['run', license === 'Apache-2.0' ? 'check' : 'validate']);
+      await runNpm(root, ['run', 'audit']);
     });
   }
 });

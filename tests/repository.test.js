@@ -89,6 +89,23 @@ test('Dependabot covers npm and GitHub Actions', async () => {
   assert.equal((dependabot.match(/interval: "weekly"/gu) ?? []).length, 2);
 });
 
+test('Git ignores every transaction recovery artifact shape', () => {
+  const uuid = '00000000-0000-4000-8000-000000000000';
+  const artifacts = [
+    `.README.md.${uuid}.0.stage`,
+    `docs/.skill-brief.md.${uuid}.backup`,
+    `src/.audit.js.${uuid}.rollback-detached`,
+  ];
+
+  for (const artifact of artifacts) {
+    const result = spawnSync('git', ['check-ignore', '--quiet', '--', artifact], {
+      cwd: PROJECT_ROOT,
+      encoding: 'utf8',
+    });
+    assert.equal(result.status, 0, `${artifact}: ${result.stderr}`);
+  }
+});
+
 test('governance documents define public contribution and private reporting boundaries', async () => {
   const security = await source('SECURITY.md');
   const contributing = await source('CONTRIBUTING.md');
